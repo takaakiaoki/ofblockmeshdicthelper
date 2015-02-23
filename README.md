@@ -6,7 +6,17 @@ Helper utilities for OpenFOAM blockMeshDict generation.
 The aim of ofblocmeshdicthekper is to provide name-based access to the elements of 
 blockDictMesh file, such as vertex, block, face, etc.
 
-## example
+## Installation
+
+From PyPI simply, 
+
+```
+pip install ofblockmeshdicthelper
+```
+
+Or, it is allowed to install directory from github repository (this or your own forked one).
+
+## Example
 Here is an example which generate wedged model shown at 
 https://openfoamwiki.net/index.php/Main_ContribExamples/AxiSymmetric
 
