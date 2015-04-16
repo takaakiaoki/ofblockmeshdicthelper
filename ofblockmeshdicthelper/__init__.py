@@ -74,22 +74,22 @@ class HexBlock(object):
     def face(self, index, name=None):
         """Generate Face object
         index is number or keyword to identify the face of Hex
-            0 = 'xm' = '-100' = (0 4 7 3)
-            1 = 'xp' = '100' = (1 2 5 6)
-            2 = 'ym' = '0-10' = (0 1 5 4)
-            3 = 'yp' = '010' = (2 3 7 6)
-            4 = 'zm' = '00-1' = (0 3 2 1)
-            5 = 'zp' = '001' = (4 5 6 7)
+            0 = 'w' = 'xm' = '-100' = (0 4 7 3)
+            1 = 'e' = 'xp' = '100' = (1 2 5 6)
+            2 = 's' = 'ym' = '0-10' = (0 1 5 4)
+            3 = 'n' = 'yp' = '010' = (2 3 7 6)
+            4 = 'b' = 'zm' = '00-1' = (0 3 2 1)
+            5 = 't' = zp' = '001' = (4 5 6 7)
         name is given to Face instance. If omitted, name is automatically
-            genaratied like ('f-' + self.name + '-xm')
+            genaratied like ('f-' + self.name + '-w')
         """
         kw_to_index = {
-            'xm': 0, '-100': 0,
-            'xp': 1, '100': 1,
-            'ym': 2, '0-10': 2,
-            'yp': 3, '010': 3,
-            'zm': 4, '00-1': 4,
-            'zp': 5, '001': 5}
+            'w': 0, 'xm': 0, '-100': 0,
+            'e': 1, 'xp': 1, '100': 1,
+            's': 2, 'ym': 2, '0-10': 2,
+            'n': 3, 'yp': 3, '010': 3,
+            'b': 4, 'zm': 4, '00-1': 4,
+            't': 5, 'zp': 5, '001': 5}
         index_to_vertex = [
             (0, 4, 7, 3),
             (1, 2, 6, 5),
@@ -98,12 +98,12 @@ class HexBlock(object):
             (0, 3, 2, 1),
             (4, 5, 6, 7)]
         index_to_defaultsuffix = [
-            'f-{}-xm',
-            'f-{}-xp',
-            'f-{}-ym',
-            'f-{}-yp',
-            'f-{}-zm',
-            'f-{}-zp']
+            'f-{}-w',
+            'f-{}-n',
+            'f-{}-s',
+            'f-{}-n',
+            'f-{}-b',
+            'f-{}-t']
 
         if isinstance(index, str):
             index = kw_to_index[index]
