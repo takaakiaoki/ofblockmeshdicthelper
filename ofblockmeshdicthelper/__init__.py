@@ -67,7 +67,7 @@ class HexBlock(object):
         """
         index = ' '.join(str(vertices[vn].index) for vn in self.vnames)
         vcom = ' '.join(self.vnames)  # for comment
-        return 'hex ({0:s}) ({1[0]:d} {1[1]:d} {1[2]:d}) '\
+        return 'hex ({0:s}) ({1[0]:d} {1[1]:d} {1[2]:d}) {2:s} '\
                'simpleGrading (1 1 1)  // {2:s} ({3:s})'.format(
                     index, self.cells, self.name, vcom)
 
