@@ -1,5 +1,6 @@
 # for compatibility to Py2.7
 from __future__ import unicode_literals, print_function
+from six import string_types
 
 import io
 from string import Template
@@ -49,17 +50,37 @@ class Face(object):
         return '({0:s})  // {1:s} ({2:s})'.format(index, self.name, com)
 
 
+class Grading(object):
+    """base class for Simple- and Edge- Grading"""
+    pass
+
+
+class SimpleGrading(Grading):
+    """configutation for 'simpleGrading'
+    multi-grading is not implemented yet
+    """
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def format(self):
+        return 'simpleGrading ({0:g} {1:g} {2:g})'.format(self.x, self.y, self.z)
+
+
 class HexBlock(object):
-    def __init__(self, vnames, cells, name):
+    def __init__(self, vnames, cells, name, grading=SimpleGrading(1, 1, 1)):
         """Initialize HexBlock instance
         vnames is the vertex names in order descrived in
             http://www.openfoam.org/docs/user/mesh-description.php
         cells is number of cells devied into in each direction
         name is the uniq name of the block
+        grading is grading method.
         """
         self.vnames = vnames
         self.cells = cells
         self.name = name
+        self.grading = grading
 
     def format(self, vertices):
         """Format instance to dump
@@ -68,8 +89,8 @@ class HexBlock(object):
         index = ' '.join(str(vertices[vn].index) for vn in self.vnames)
         vcom = ' '.join(self.vnames)  # for comment
         return 'hex ({0:s}) {2:s} ({1[0]:d} {1[1]:d} {1[2]:d}) '\
-               'simpleGrading (1 1 1)  // {2:s} ({3:s})'.format(
-                    index, self.cells, self.name, vcom)
+               '{4:s}  // {2:s} ({3:s})'.format(
+                    index, self.cells, self.name, vcom, self.grading.format())
 
     def face(self, index, name=None):
         """Generate Face object
@@ -105,7 +126,7 @@ class HexBlock(object):
             'f-{}-b',
             'f-{}-t']
 
-        if isinstance(index, str):
+        if isinstance(index, string_types):
             index = kw_to_index[index]
 
         vnames = tuple([self.vnames[i] for i in index_to_vertex[index]])
@@ -197,8 +218,8 @@ class BlockMeshDict(object):
             # replace mapping from n w by to v
             self.vertices[n] = v
 
-    def add_hexblock(self, vnames, cells, name):
-        b = HexBlock(vnames, cells, name)
+    def add_hexblock(self, vnames, cells, name, grading=SimpleGrading(1, 1, 1)):
+        b = HexBlock(vnames, cells, name, grading)
         self.blocks[name] = b
         return b
 
