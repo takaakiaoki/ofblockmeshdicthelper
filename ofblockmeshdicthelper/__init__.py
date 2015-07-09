@@ -83,9 +83,18 @@ class SimpleGrading(Grading):
     multi-grading is not implemented yet
     """
     def __init__(self, x, y, z):
-        self.x = SimpleGradingElement(x)
-        self.y = SimpleGradingElement(y)
-        self.z = SimpleGradingElement(z)
+        if not isinstance(x, SimpleGradingElement):
+            self.x = SimpleGradingElement(x)
+        else:
+            self.x = x
+        if not isinstance(y, SimpleGradingElement):
+            self.y = SimpleGradingElement(y)
+        else:
+            self.y = y
+        if not isinstance(z, SimpleGradingElement):
+            self.z = SimpleGradingElement(z)
+        else:
+            self.z = z
 
     def format(self):
         return 'simpleGrading ({0:s} {1:s} {2:s})'.format(self.x.format(), self.y.format(), self.z.format())
