@@ -3,6 +3,7 @@ from __future__ import unicode_literals, print_function
 from six import string_types
 
 import io
+from collections import Iterable
 from string import Template
 
 
@@ -55,17 +56,39 @@ class Grading(object):
     pass
 
 
+class SimpleGradingElement(object):
+    """x, y or z Element of simpleGrading. adopted to multi-grading
+    """
+    def __init__(self, d):
+        """initialization
+        d is single number for expansion ratio
+          or iterative object consits (dirction ratio, cell ratio, expansion ratio)
+        """
+        self.d = d
+
+    def format(self):
+        if isinstance(self.d, Iterable):
+            s = io.StringIO()
+            s.write('( ')
+            for e in self.d:
+                s.write('( {0:g} {1:g} {2:g} ) '.format(e[0], e[1], e[2]))
+            s.write(')')
+            return s.getvalue()
+        else:
+            return str(self.d)
+
+
 class SimpleGrading(Grading):
     """configutation for 'simpleGrading'
     multi-grading is not implemented yet
     """
     def __init__(self, x, y, z):
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x = SimpleGradingElement(x)
+        self.y = SimpleGradingElement(y)
+        self.z = SimpleGradingElement(z)
 
     def format(self):
-        return 'simpleGrading ({0:g} {1:g} {2:g})'.format(self.x, self.y, self.z)
+        return 'simpleGrading ({0:s} {1:s} {2:s})'.format(self.x.format(), self.y.format(), self.z.format())
 
 
 class HexBlock(object):
@@ -270,7 +293,7 @@ edges
 );'''
 
     def format_blocks_section(self):
-        """format bloks section.
+        """format blocks section.
         assign_vertexid() should be called before this method, because
         vertices reffered by blocks should have valid index.
         """
