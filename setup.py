@@ -15,6 +15,7 @@ setup(
     url='https://github.com/takaakiaoki/ofblockmeshdicthelper',
     packages=find_packages(),
     package_dir={'ofblockmeshdicthelper': 'ofblockmeshdicthelper'},
+    install_requires=['six'],
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3.4",
