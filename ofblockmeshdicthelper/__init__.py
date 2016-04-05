@@ -167,6 +167,31 @@ class HexBlock(object):
         return Face(vnames, name)
 
 
+class ArcEdge(object):
+    def __init__(self, vnames, name, interVertex):
+        """Initialize ArcEdge instance
+        vnames is the vertex names in order descrived in
+          http://www.openfoam.org/docs/user/mesh-description.php
+        # two vertices is needed for Arc
+        cells is number of cells devied into in each direction
+        name is the uniq name of the block
+        grading is grading method.
+        """
+        self.vnames = vnames
+        self.name = name
+        self.interVertex = interVertex
+
+    def format(self, vertices):
+        """Format instance to dump
+        vertices is dict of name to Vertex
+        """
+        index = ' '.join(str(vertices[vn].index) for vn in self.vnames)
+        vcom = ' '.join(self.vnames)  # for comment
+        return 'arc {0:s} ({1.x:f} {1.y:f} {1.z:f}) '\
+                '// {2:s} ({3:s})'.format(
+                        index, self.interVertex, self.name, vcom)
+
+
 class Boundary(object):
     def __init__(self, type_, name, faces=[]):
         """ initialize boundary
@@ -208,6 +233,7 @@ class BlockMeshDict(object):
         self.convert_to_meters = 1.0
         self.vertices = {}  # mapping of uniq name to Vertex object
         self.blocks = {}
+        self.edges = {}
         self.boundaries = {}
 
     def set_metric(self, metric):
@@ -255,6 +281,11 @@ class BlockMeshDict(object):
         self.blocks[name] = b
         return b
 
+    def add_arcedge(self, vnames, name, interVertex):
+        e = ArcEdge(vnames, name, interVertex)
+        self.edges[name] = e
+        return e
+
     def add_boundary(self, type_, name, faces=[]):
         b = Boundary(type_, name, faces)
         self.boundaries[name] = b
@@ -295,12 +326,6 @@ class BlockMeshDict(object):
         buf.write(');')
         return buf.getvalue()
 
-    def format_edges_section(self):
-        return '''\
-edges
-(
-);'''
-
     def format_blocks_section(self):
         """format blocks section.
         assign_vertexid() should be called before this method, because
@@ -311,6 +336,19 @@ edges
         buf.write('(\n')
         for b in self.blocks.values():
             buf.write('    ' + b.format(self.vertices) + '\n')
+        buf.write(');')
+        return buf.getvalue()
+
+    def format_edges_section(self):
+        """format edges section.
+        assign_vertexid() should be called before this method, because
+        vertices reffered by blocks should have valid index.
+        """
+        buf = io.StringIO()
+        buf.write('edges\n')
+        buf.write('(\n')
+        for e in self.edges.values():
+            buf.write('  ' + e.format(self.vertices) + '\n')
         buf.write(');')
         return buf.getvalue()
 
