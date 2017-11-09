@@ -34,6 +34,16 @@ class Vertex(object):
         return (self.z, self.y, self.x) == (rhs.z, rhs.y, rhs.z)
 
 
+class Point(object):
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def format(self):
+        return '( {0:18.15g} {1:18.15g} {2:18.15g} )'.format(
+            self.x, self.y, self.z)
+
 class Face(object):
     def __init__(self, vnames, name):
         """
@@ -191,6 +201,35 @@ class ArcEdge(object):
                 '// {2:s} ({3:s})'.format(
                         index, self.interVertex, self.name, vcom)
 
+class SplineEdge(object):
+    def __init__(self, vnames, name, points):
+        """Initialize SplineEdge instance
+        vnames is the vertex names in order descrived in
+          http://www.openfoam.org/docs/user/mesh-description.php
+        # two vertices is needed for Spline
+        """
+        self.vnames = vnames
+        self.name = name
+        self.points = points
+
+    def format(self, vertices):
+        """Format instance to dump
+        vertices is dict of name to Vertex
+        """
+        index = ' '.join(str(vertices[vn].index) for vn in self.vnames)
+        vcom = ' '.join(self.vnames)  # for comment
+        buf = io.StringIO()
+
+        buf.write('spline {0:s}                      '\
+                '// {1:s} ({2:s})'.format(
+                        index,self.name, vcom))
+        buf.write('\n     (\n')
+        for p in self.points:
+            buf.write('         '+p.format()+'\n')
+        buf.write('\n     )\n')
+        buf.write('')
+        return buf.getvalue()
+
 
 class Boundary(object):
     def __init__(self, type_, name, faces=[]):
@@ -283,6 +322,11 @@ class BlockMeshDict(object):
 
     def add_arcedge(self, vnames, name, interVertex):
         e = ArcEdge(vnames, name, interVertex)
+        self.edges[name] = e
+        return e
+
+    def add_splineedge(self, vnames, name, points):
+        e = SplineEdge(vnames, name, points)
         self.edges[name] = e
         return e
 
