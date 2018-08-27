@@ -28,10 +28,10 @@ class Vertex(object):
             self.x, self.y, self.z, com)
 
     def __lt__(self, rhs):
-        return (self.z, self.y, self.x) < (rhs.z, rhs.y, rhs.z)
+        return (self.z, self.y, self.x) < (rhs.z, rhs.y, rhs.x)
 
     def __eq__(self, rhs):
-        return (self.z, self.y, self.x) == (rhs.z, rhs.y, rhs.z)
+        return (self.z, self.y, self.x) == (rhs.z, rhs.y, rhs.x)
 
 
 class Point(object):
