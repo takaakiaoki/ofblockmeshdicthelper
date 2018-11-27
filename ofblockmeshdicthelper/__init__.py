@@ -90,7 +90,6 @@ class SimpleGradingElement(object):
 
 class SimpleGrading(Grading):
     """configutation for 'simpleGrading'
-    multi-grading is not implemented yet
     """
     def __init__(self, x, y, z):
         if not isinstance(x, SimpleGradingElement):
@@ -109,6 +108,69 @@ class SimpleGrading(Grading):
     def format(self):
         return 'simpleGrading ({0:s} {1:s} {2:s})'.format(self.x.format(), self.y.format(), self.z.format())
 
+class EdgeGrading(Grading):
+    """configutation for 'edgeGrading'
+    """
+    def __init__(self, x1, x2, x3, x4, y1, y2, y3, y4, z1, z2, z3, z4):
+        if not isinstance(x1, SimpleGradingElement):
+            self.x1 = SimpleGradingElement(x1)
+        else:
+            self.x1 = x1
+        if not isinstance(x2, SimpleGradingElement):
+            self.x2 = SimpleGradingElement(x2)
+        else:
+            self.x2 = x2
+        if not isinstance(x3, SimpleGradingElement):
+            self.x3 = SimpleGradingElement(x3)
+        else:
+            self.x3 = x3
+        if not isinstance(x4, SimpleGradingElement):
+            self.x4 = SimpleGradingElement(x4)
+        else:
+            self.x4 = x4
+        if not isinstance(y1, SimpleGradingElement):
+            self.y1 = SimpleGradingElement(y1)
+        else:
+            self.y1 = y1
+        if not isinstance(y2, SimpleGradingElement):
+            self.y2 = SimpleGradingElement(y2)
+        else:
+            self.y2 = y2
+        if not isinstance(y3, SimpleGradingElement):
+            self.y3 = SimpleGradingElement(y3)
+        else:
+            self.y3 = y3
+        if not isinstance(y4, SimpleGradingElement):
+            self.y4 = SimpleGradingElement(y4)
+        else:
+            self.y4 = y4
+        if not isinstance(x1, SimpleGradingElement):
+            self.z1 = SimpleGradingElement(z1)
+        else:
+            self.z1 = z1
+        if not isinstance(z2, SimpleGradingElement):
+            self.z2 = SimpleGradingElement(z2)
+        else:
+            self.z2 = z2
+        if not isinstance(z3, SimpleGradingElement):
+            self.z3 = SimpleGradingElement(z3)
+        else:
+            self.z3 = z3
+        if not isinstance(z4, SimpleGradingElement):
+            self.z4 = SimpleGradingElement(z4)
+        else:
+            self.z4 = z4
+        
+
+    def format(self):
+        return 'edgeGrading '\
+                '({0:s} {1:s} {2:s} {3:s} '\
+                '{4:s} {5:s} {6:s} {7:s} '\
+                '{8:s} {9:s} {10:s} {11:s})'.format(
+                    self.x1.format(), self.x2.format(), self.x3.format(), self.x4.format(),
+                    self.y1.format(), self.y2.format(), self.y3.format(), self.y4.format(),
+                    self.z1.format(), self.z2.format(), self.z3.format(), self.z4.format()
+                    )
 
 class HexBlock(object):
     def __init__(self, vnames, cells, name, grading=SimpleGrading(1, 1, 1)):
