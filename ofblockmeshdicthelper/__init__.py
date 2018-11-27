@@ -259,7 +259,7 @@ class ArcEdge(object):
         """
         index = ' '.join(str(vertices[vn].index) for vn in self.vnames)
         vcom = ' '.join(self.vnames)  # for comment
-        return 'arc {0:s} ({1.x:f} {1.y:f} {1.z:f}) '\
+        return 'arc {0:s} ({1.x:18.15g} {1.y:18.15g} {1.z:18.15g}) '\
                 '// {2:s} ({3:s})'.format(
                         index, self.interVertex, self.name, vcom)
 
