@@ -5,6 +5,7 @@ from six import string_types
 import io
 from collections import Iterable
 from string import Template
+from itertools import groupby
 
 
 class Vertex(object):
@@ -32,6 +33,9 @@ class Vertex(object):
 
     def __eq__(self, rhs):
         return (self.z, self.y, self.x) == (rhs.z, rhs.y, rhs.x)
+
+    def __hash__(self):
+        return hash((self.z, self.y, self.x))
 
 
 class Point(object):
@@ -376,6 +380,20 @@ class BlockMeshDict(object):
             v.alias.update(w.alias)
             # replace mapping from n w by to v
             self.vertices[n] = v
+
+    def merge_vertices(self):
+        """call reduce_vertex on all vertices with identical values."""
+
+        # groupby expects sorted data
+        sorted_vertices = sorted(list(self.vertices.items()), key=lambda v: hash(v[1]))
+        groups = []
+        for k, g in groupby(sorted_vertices, lambda v: hash(v[1])):
+            groups.append(list(g))
+        for group in groups:
+            if len(group) == 1:
+                continue
+            names = [v[0] for v in group]
+            self.reduce_vertex(*names)
 
     def add_hexblock(self, vnames, cells, name, grading=SimpleGrading(1, 1, 1)):
         b = HexBlock(vnames, cells, name, grading)
