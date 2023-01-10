@@ -167,7 +167,7 @@ class EdgeGrading(Grading):
             self.z4 = SimpleGradingElement(z4)
         else:
             self.z4 = z4
-        
+
 
     def format(self):
         return 'edgeGrading '\
@@ -231,7 +231,7 @@ class HexBlock(object):
             (4, 5, 6, 7)]
         index_to_defaultsuffix = [
             'f-{}-w',
-            'f-{}-n',
+            'f-{}-e',
             'f-{}-s',
             'f-{}-n',
             'f-{}-b',
