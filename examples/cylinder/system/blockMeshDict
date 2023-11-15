@@ -38,62 +38,27 @@ vertices
 
 edges
 (
-  arc 1 7 (1.000000 0.000000 0.000000) // a00 (v0e0 v1e0)
-  arc 7 6 (0.000000 1.000000 0.000000) // a10 (v1e0 v2e0)
-  arc 6 0 (-1.000000 0.000000 0.000000) // a20 (v2e0 v3e0)
-  arc 0 1 (0.000000 -1.000000 0.000000) // a30 (v3e0 v0e0)
-  arc 9 15 (1.000000 0.000000 10.000000) // a0L (v0eL v1eL)
-  arc 15 14 (0.000000 1.000000 10.000000) // a1L (v1eL v2eL)
-  arc 14 8 (-1.000000 0.000000 10.000000) // a2L (v2eL v3eL)
-  arc 8 9 (0.000000 -1.000000 10.000000) // a3L (v3eL v0eL)
+  arc 1 7 (                 1                  0                  0) // a00 (v0e0 v1e0)
+  arc 7 6 (                 0                  1                  0) // a10 (v1e0 v2e0)
+  arc 6 0 (                -1                  0                  0) // a20 (v2e0 v3e0)
+  arc 0 1 (                 0                 -1                  0) // a30 (v3e0 v0e0)
+  arc 9 15 (                 1                  0                 10) // a0L (v0eL v1eL)
+  arc 15 14 (                 0                  1                 10) // a1L (v1eL v2eL)
+  arc 14 8 (                -1                  0                 10) // a2L (v2eL v3eL)
+  arc 8 9 (                 0                 -1                 10) // a3L (v3eL v0eL)
 );
 
 blocks
 (
-    hex (3 5 4 2 11 13 12 10) bcentral (20 20 100) simpleGrading (1 1 1)  // bcentral (v0i0 v1i0 v2i0 v3i0 v0iL v1iL v2iL v3iL)
-    hex (3 1 7 5 11 9 15 13) be (20 20 100) simpleGrading (1 1 1)  // be (v0i0 v0e0 v1e0 v1i0 v0iL v0eL v1eL v1iL)
-    hex (5 7 6 4 13 15 14 12) bn (20 20 100) simpleGrading (1 1 1)  // bn (v1i0 v1e0 v2e0 v2i0 v1iL v1eL v2eL v2iL)
-    hex (4 6 0 2 12 14 8 10) bw (20 20 100) simpleGrading (1 1 1)  // bw (v2i0 v2e0 v3e0 v3i0 v2iL v2eL v3eL v3iL)
-    hex (2 0 1 3 10 8 9 11) bs (20 20 100) simpleGrading (1 1 1)  // bs (v3i0 v3e0 v0e0 v0i0 v3iL v3eL v0eL v0iL)
+    hex (3 5 4 2 11 13 12 10) cylinder (20 20 100) simpleGrading (1 1 1)  // cylinder (v0i0 v1i0 v2i0 v3i0 v0iL v1iL v2iL v3iL)
+    hex (3 1 7 5 11 9 15 13) cylinder (20 20 100) simpleGrading (1 1 1)  // cylinder (v0i0 v0e0 v1e0 v1i0 v0iL v0eL v1eL v1iL)
+    hex (5 7 6 4 13 15 14 12) cylinder (20 20 100) simpleGrading (1 1 1)  // cylinder (v1i0 v1e0 v2e0 v2i0 v1iL v1eL v2eL v2iL)
+    hex (4 6 0 2 12 14 8 10) cylinder (20 20 100) simpleGrading (1 1 1)  // cylinder (v2i0 v2e0 v3e0 v3i0 v2iL v2eL v3eL v3iL)
+    hex (2 0 1 3 10 8 9 11) cylinder (20 20 100) simpleGrading (1 1 1)  // cylinder (v3i0 v3e0 v0e0 v0i0 v3iL v3eL v0eL v0iL)
 );
 
 boundary
 (
-    inlet
-    {
-        type patch;
-        faces
-        (
-            (3 2 4 5)  // f-bcentral-b (v0i0 v3i0 v2i0 v1i0)
-            (3 5 7 1)  // f-be-b (v0i0 v1i0 v1e0 v0e0)
-            (5 4 6 7)  // f-bn-b (v1i0 v2i0 v2e0 v1e0)
-            (4 2 0 6)  // f-bw-b (v2i0 v3i0 v3e0 v2e0)
-            (2 3 1 0)  // f-bs-b (v3i0 v0i0 v0e0 v3e0)
-        );
-    }
-    outlet
-    {
-        type patch;
-        faces
-        (
-            (11 13 12 10)  // f-bcentral-t (v0iL v1iL v2iL v3iL)
-            (11 9 15 13)  // f-be-t (v0iL v0eL v1eL v1iL)
-            (13 15 14 12)  // f-bn-t (v1iL v1eL v2eL v2iL)
-            (12 14 8 10)  // f-bw-t (v2iL v2eL v3eL v3iL)
-            (10 8 9 11)  // f-bs-t (v3iL v3eL v0eL v0iL)
-        );
-    }
-    pipe
-    {
-        type wall;
-        faces
-        (
-            (1 7 15 9)  // f-be-n (v0e0 v1e0 v1eL v0eL)
-            (7 6 14 15)  // f-bn-n (v1e0 v2e0 v2eL v1eL)
-            (6 0 8 14)  // f-bw-n (v2e0 v3e0 v3eL v2eL)
-            (0 1 9 8)  // f-bs-n (v3e0 v0e0 v0eL v3eL)
-        );
-    }
 );
 
 mergePatchPairs

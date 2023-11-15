@@ -180,17 +180,17 @@ class EdgeGrading(Grading):
                     )
 
 class HexBlock(object):
-    def __init__(self, vnames, cells, name, grading=SimpleGrading(1, 1, 1)):
+    def __init__(self, vnames, cells, zone, grading=SimpleGrading(1, 1, 1)):
         """Initialize HexBlock instance
         vnames is the vertex names in order descrived in
             http://www.openfoam.org/docs/user/mesh-description.php
         cells is number of cells devied into in each direction
-        name is the uniq name of the block
+        zone is the name of the cell zone (it can be the same for different blocks)
         grading is grading method.
         """
         self.vnames = vnames
         self.cells = cells
-        self.name = name
+        self.zone = zone
         self.grading = grading
 
     def format(self, vertices):
@@ -201,7 +201,7 @@ class HexBlock(object):
         vcom = ' '.join(self.vnames)  # for comment
         return 'hex ({0:s}) {2:s} ({1[0]:d} {1[1]:d} {1[2]:d}) '\
                '{4:s}  // {2:s} ({3:s})'.format(
-                    index, self.cells, self.name, vcom, self.grading.format())
+                    index, self.cells, self.zone, vcom, self.grading.format())
 
     def face(self, index, name=None):
         """Generate Face object
@@ -398,8 +398,18 @@ class BlockMeshDict(object):
             names = [v[0] for v in group]
             self.reduce_vertex(*names)
 
-    def add_hexblock(self, vnames, cells, name, grading=SimpleGrading(1, 1, 1)):
-        b = HexBlock(vnames, cells, name, grading)
+    def add_hexblock(self, vnames, cells, name, zone, grading=SimpleGrading(1, 1, 1)):
+        """
+        Add block to dictionary. 
+        Usage: 
+        vnames is the vertex names in order descrived in
+            http://www.openfoam.org/docs/user/mesh-description.php
+        cells is number of cells devied into in each direction
+        name is a uniq name for the block
+        zone is the name of the cell zone (it can be the same for different blocks)
+        grading is grading method.
+        """
+        b = HexBlock(vnames, cells, zone, grading)
         self.blocks[name] = b
         return b
 
