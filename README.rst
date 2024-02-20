@@ -19,7 +19,12 @@ From PyPI simply,
 
     pip install ofblockmeshdicthelper
 
-Or, it is allowed to install directory from github repository (this or your own forked one).
+For `python>=3.10` install the library from the latest commits (see #11)
+
+.. code-block:: shell
+
+    pip install 'ofblockmeshdicthelper @ git+https://github.com/takaakiaoki/ofblockmeshdicthelper.git'
+
 
 Example
 ========
