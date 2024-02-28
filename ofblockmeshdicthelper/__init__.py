@@ -180,7 +180,7 @@ class EdgeGrading(Grading):
                     )
 
 class HexBlock(object):
-    def __init__(self, vnames, cells, zone, grading=SimpleGrading(1, 1, 1)):
+    def __init__(self, vnames, cells, name, zone, grading=SimpleGrading(1, 1, 1)):
         """Initialize HexBlock instance
         vnames is the vertex names in order descrived in
             http://www.openfoam.org/docs/user/mesh-description.php
@@ -190,6 +190,7 @@ class HexBlock(object):
         """
         self.vnames = vnames
         self.cells = cells
+        self.name = name
         self.zone = zone
         self.grading = grading
 
@@ -409,7 +410,7 @@ class BlockMeshDict(object):
         zone is the name of the cell zone (it can be the same for different blocks)
         grading is grading method.
         """
-        b = HexBlock(vnames, cells, zone, grading)
+        b = HexBlock(vnames, cells, name, zone, grading)
         self.blocks[name] = b
         return b
 
