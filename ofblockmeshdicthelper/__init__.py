@@ -28,7 +28,7 @@ class Vertex(object):
         if len(self.alias) > 1:
             com += ' : '
             com += ' '.join(self.alias)
-        return '( {0:18.15g} {1:18.15g} {2:18.15g} )  // {3:s}'.format(
+        return '( {0:25.22g} {1:25.22g} {2:25.22g} )  // {3:s}'.format(
             self.x, self.y, self.z, com)
 
     def __lt__(self, rhs):
