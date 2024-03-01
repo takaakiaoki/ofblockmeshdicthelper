@@ -28,7 +28,7 @@ class Vertex(object):
         if len(self.alias) > 1:
             com += ' : '
             com += ' '.join(self.alias)
-        return '( {0:18.15g} {1:18.15g} {2:18.15g} )  // {3:s}'.format(
+        return '( {0:25.22g} {1:25.22g} {2:25.22g} )  // {3:s}'.format(
             self.x, self.y, self.z, com)
 
     def __lt__(self, rhs):
@@ -180,7 +180,7 @@ class EdgeGrading(Grading):
                     )
 
 class HexBlock(object):
-    def __init__(self, vnames, cells, zone, grading=SimpleGrading(1, 1, 1)):
+    def __init__(self, vnames, cells, name, zone, grading=SimpleGrading(1, 1, 1)):
         """Initialize HexBlock instance
         vnames is the vertex names in order descrived in
             http://www.openfoam.org/docs/user/mesh-description.php
@@ -190,6 +190,7 @@ class HexBlock(object):
         """
         self.vnames = vnames
         self.cells = cells
+        self.name = name
         self.zone = zone
         self.grading = grading
 
@@ -200,8 +201,8 @@ class HexBlock(object):
         index = ' '.join(str(vertices[vn].index) for vn in self.vnames)
         vcom = ' '.join(self.vnames)  # for comment
         return 'hex ({0:s}) {2:s} ({1[0]:d} {1[1]:d} {1[2]:d}) '\
-               '{4:s}  // {2:s} ({3:s})'.format(
-                    index, self.cells, self.zone, vcom, self.grading.format())
+               '{5:s}  // {2:s} {3:s} ({4:s})'.format(
+                    index, self.cells, self.zone, self.name, vcom, self.grading.format())
 
     def face(self, index, name=None):
         """Generate Face object
@@ -409,7 +410,7 @@ class BlockMeshDict(object):
         zone is the name of the cell zone (it can be the same for different blocks)
         grading is grading method.
         """
-        b = HexBlock(vnames, cells, zone, grading)
+        b = HexBlock(vnames, cells, name, zone, grading)
         self.blocks[name] = b
         return b
 
