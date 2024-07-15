@@ -541,6 +541,12 @@ $boundary
 
 $mergepatchpairs
 
+defaultPatch
+{
+    type wall;
+    name walls;
+}
+
 // ************************************************************************* //
 ''')
 
