@@ -253,9 +253,6 @@ class ArcEdge(object):
         vnames is the vertex names in order descrived in
           http://www.openfoam.org/docs/user/mesh-description.php
         # two vertices is needed for Arc
-        cells is number of cells devied into in each direction
-        name is the uniq name of the block
-        grading is grading method.
         """
         self.vnames = vnames
         self.name = name
@@ -271,6 +268,28 @@ class ArcEdge(object):
                 '// {2:s} ({3:s})'.format(
                         index, self.interVertex, self.name, vcom)
 
+class ArcEdgeAngle(object):
+    def __init__(self, vnames, angle, name, normalVector):
+        """Initialize ArcEdge instance
+        vnames is the vertex names in order descrived in
+          http://www.openfoam.org/docs/user/mesh-description.php
+        # two vertices and an angle is needed for Arc
+        """
+        self.vnames = vnames
+        self.name = name
+        self.angle = angle
+        self.normalVector = normalVector
+
+    def format(self, vertices):
+        """Format instance to dump
+        vertices is dict of name to Vertex
+        """
+        index = ' '.join(str(vertices[vn].index) for vn in self.vnames)
+        vcom = ' '.join(self.vnames)  # for comment
+        return 'arc {0:s} {1:18.15g} ({2.x:18.15g} {2.y:18.15g} {2.z:18.15g}) '\
+                '// {3:s} ({4:s})'.format(
+                        index, self.angle, self.normalVector, self.name, vcom)
+        
 class SplineEdge(object):
     def __init__(self, vnames, name, points):
         """Initialize SplineEdge instance
@@ -419,6 +438,12 @@ class BlockMeshDict(object):
         self.edges[name] = e
         return e
 
+    def add_arcedgeangle(self, vnames, angle, name, normalVector):
+        e = ArcEdgeAngle(vnames, angle, name, normalVector)
+        self.edges[name] = e
+        return e
+
+
     def add_splineedge(self, vnames, name, points):
         e = SplineEdge(vnames, name, points)
         self.edges[name] = e
@@ -540,6 +565,12 @@ $blocks
 $boundary
 
 $mergepatchpairs
+
+defaultPatch
+{
+    type wall;
+    name walls;
+}
 
 // ************************************************************************* //
 ''')
